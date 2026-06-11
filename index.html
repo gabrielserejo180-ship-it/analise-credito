@@ -1315,7 +1315,6 @@
     <button id="nav-dashboard" onclick="switchNav('dashboard')" class="nav-btn">📊 Dashboard</button>
     <button id="nav-analise" onclick="switchNav('analise')" class="nav-btn active">⚡ Nova Análise</button>
     <button id="nav-consulta" onclick="switchNav('consulta')" class="nav-btn">🔍 Consultar</button>
-    <button id="nav-controle" onclick="switchNav('controle')" class="nav-btn">📁 Controle</button>
   </div>
 
   <!-- PAINEL: DASHBOARD -->
@@ -1721,98 +1720,6 @@
     <div id="consulta-resultados" style="margin-top:16px;"></div>
   </div>
 
-  <!-- PAINEL: CONTROLE DE LIBERAÇÃO -->
-  <div id="painel-controle" style="display:none;">
-    <div class="page-header">
-      <h2>Controle de Liberação</h2>
-      <p>Registre decisões de crédito com motivo e evidências para consulta futura</p>
-    </div>
-
-    <!-- FORMULÁRIO DE REGISTRO -->
-    <div class="card" id="card-controle-form">
-      <div class="section-title">📋 Novo Registro</div>
-
-      <div class="grid2" style="margin-bottom:16px">
-        <div class="field"><label>Nome de Quem Decidiu</label><input type="text" id="ctrl-decisor" placeholder="Ex: Gabriel Serejo, Gestora Ana..."></div>
-        <div class="field"><label>Data da Decisão</label><input type="date" id="ctrl-data" style="color-scheme:dark"></div>
-      </div>
-
-      <div class="grid2" style="margin-bottom:16px">
-        <div class="field"><label>Cliente (Razão Social)</label><input type="text" id="ctrl-cliente" placeholder="Nome da empresa ou cliente"></div>
-        <div class="field"><label>CNPJ ou CPF</label><input type="text" id="ctrl-cnpj" placeholder="CNPJ ou CPF do cliente"></div>
-      </div>
-
-      <div class="grid2" style="margin-bottom:16px">
-        <div class="field"><label>Representante</label><input type="text" id="ctrl-representante" placeholder="Nome do representante comercial"></div>
-        <div class="field"><label>Decisão</label>
-          <select id="ctrl-decisao">
-            <option value="">Selecione...</option>
-            <option value="Liberado">✅ Liberado</option>
-            <option value="Recusado">❌ Recusado</option>
-            <option value="Liberado com condição">⚠️ Liberado com condição</option>
-            <option value="Encaminhado para gestor">🔄 Encaminhado para gestor</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field" style="margin-bottom:16px">
-        <label>Valor Envolvido (R$)</label>
-        <input type="number" id="ctrl-valor" placeholder="0,00">
-      </div>
-
-      <div class="field" style="margin-bottom:16px">
-        <label>Motivo / Justificativa</label>
-        <textarea id="ctrl-motivo" rows="4" placeholder="Descreva o motivo da decisão, situação do cliente, restrições encontradas, condições impostas..."></textarea>
-      </div>
-
-      <!-- Upload de arquivos -->
-      <div style="margin-bottom:16px">
-        <label>Evidências / Anexos</label>
-        <div class="upload-zone" id="ctrl-zone"
-          ondragover="ctrlDragOver(event)" ondragleave="ctrlDragLeave()" ondrop="ctrlDrop(event)"
-          onclick="document.getElementById('ctrl-input').click()"
-          style="margin-top:6px;cursor:pointer">
-          <input type="file" id="ctrl-input" multiple style="display:none" onchange="ctrlFilesSelected(event)">
-          <div class="upload-icon">📎</div>
-          <div class="upload-label">Arraste ou <span>clique para selecionar</span></div>
-          <div class="upload-hint">Print do SPC, conversa, e-mail, qualquer evidência</div>
-        </div>
-        <div id="ctrl-files-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px;"></div>
-        <div id="ctrl-files-empty" style="font-size:12px;color:var(--text3);font-family:var(--mono);padding:8px 0;">Nenhum arquivo anexado.</div>
-      </div>
-
-      <div id="ctrl-gs-status" style="display:none;font-size:11px;font-family:var(--mono);padding:8px 12px;border-radius:6px;margin-bottom:12px;border:1px solid var(--border);"></div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button onclick="salvarControle()" id="btn-ctrl-salvar" style="padding:12px 24px;background:var(--accent);color:#fff;font-family:var(--sans);font-size:14px;font-weight:600;border:none;border-radius:var(--radius);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;">
-          <span id="ctrl-spinner" style="width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:none;"></span>
-          💾 Salvar Registro
-        </button>
-        <button onclick="limparControle()" style="padding:12px 20px;background:var(--surface);color:var(--text3);font-family:var(--sans);font-size:13px;font-weight:600;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;">Limpar</button>
-      </div>
-    </div>
-
-    <!-- HISTÓRICO DE REGISTROS -->
-    <div style="margin-top:28px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <div style="font-size:10px;font-family:var(--mono);color:var(--accent);letter-spacing:1.8px;text-transform:uppercase;font-weight:600;">📂 Histórico de Registros</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          <input type="text" id="ctrl-busca" placeholder="Buscar por cliente ou decisor..." onkeyup="filtrarControle()" style="padding:7px 12px;font-size:12px;width:240px;">
-          <select id="ctrl-filtro-decisao" onchange="filtrarControle()" style="padding:7px 12px;font-size:12px;width:180px;">
-            <option value="">Todas as decisões</option>
-            <option value="Liberado">✅ Liberado</option>
-            <option value="Recusado">❌ Recusado</option>
-            <option value="Liberado com condição">⚠️ Com condição</option>
-            <option value="Encaminhado para gestor">🔄 Para gestor</option>
-          </select>
-          <button onclick="carregarControle()" style="padding:7px 14px;background:var(--surface);border:1px solid var(--border);color:var(--text3);font-family:var(--mono);font-size:11px;font-weight:700;border-radius:6px;cursor:pointer;">↺ Atualizar</button>
-        </div>
-      </div>
-      <div id="ctrl-status" style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:10px;display:none;"></div>
-      <div id="ctrl-resultados"></div>
-    </div>
-  </div>
-
 </div>
 </div><!-- end app-screen -->
 
@@ -1820,7 +1727,7 @@
 // ══════════════════════════════════════════════════════════
 // GOOGLE SHEETS CONFIG
 // ══════════════════════════════════════════════════════════
-const GS_URL = 'https://script.google.com/macros/s/AKfycbyF7mxMRrVvHy8weIPm0YI1V52clnPeJ89uQu6uj_JKSgg9xrANbFqJPsGFYUiJNf_r/exec';
+const GS_URL = 'https://script.google.com/macros/s/AKfycbxcZ8R4Q1vAjbif9zjPZGqLh23RhqzZf26Mqgd9MMvK_z_fzMksRsftFPdabQ1dTG0/exec';
 
 // Variáveis globais declaradas no topo para evitar erros de referência
 let registros = [];
@@ -2152,275 +2059,7 @@ async function doFirstAccessReset() {
 
 
 
-// ══════════════════════════════════════════════════════════
-// CONTROLE DE LIBERAÇÃO
-// ══════════════════════════════════════════════════════════
-const ctrlStore = { arquivos: [] };
-let ctrlRegistros = [];
-
-// Inicializa a data de hoje ao abrir a aba
-function iniciarControle() {
-  const dataEl = document.getElementById('ctrl-data');
-  if (dataEl && !dataEl.value) {
-    const hoje = new Date();
-    dataEl.value = hoje.toISOString().split('T')[0];
-  }
-}
-
-// Upload de arquivos
-function ctrlDragOver(e) { e.preventDefault(); document.getElementById('ctrl-zone').style.borderColor = 'var(--accent)'; }
-function ctrlDragLeave()  { document.getElementById('ctrl-zone').style.borderColor = ''; }
-function ctrlDrop(e)      { e.preventDefault(); ctrlDragLeave(); const files = Array.from(e.dataTransfer.files); if (files.length) ctrlProcessFiles(files); }
-function ctrlFilesSelected(e) { const files = Array.from(e.target.files); if (files.length) ctrlProcessFiles(files); e.target.value = ''; }
-
-function ctrlProcessFiles(files) {
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      ctrlStore.arquivos.push({ name: file.name, type: file.type, data: ev.target.result, id: Date.now() + Math.random() });
-      ctrlRenderFiles();
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function ctrlRenderFiles() {
-  const grid  = document.getElementById('ctrl-files-grid');
-  const empty = document.getElementById('ctrl-files-empty');
-  empty.style.display = ctrlStore.arquivos.length ? 'none' : 'block';
-  grid.innerHTML = ctrlStore.arquivos.map(doc => {
-    const isImage = doc.type.startsWith('image/');
-    const ext = doc.name.split('.').pop().toUpperCase();
-    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;">
-      ${isImage
-        ? `<img src="${doc.data}" style="width:100%;height:90px;object-fit:cover;display:block;cursor:zoom-in" onclick="ctrlPreview('${doc.id}')">`
-        : `<div style="width:100%;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:var(--surface3);cursor:pointer" onclick="ctrlPreview('${doc.id}')">
-            <span style="font-size:24px">${ext==='PDF'?'📄':ext==='XML'?'📋':'📎'}</span>
-            <span style="font-family:var(--mono);font-size:10px;font-weight:700;background:var(--purple);color:#fff;padding:1px 6px;border-radius:3px">${ext}</span>
-           </div>`}
-      <div style="padding:5px 7px;font-size:10px;color:var(--text2);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${doc.name}">${doc.name}</div>
-      <button onclick="ctrlRemoverArquivo('${doc.id}')" style="position:absolute;top:4px;right:4px;background:rgba(255,77,106,0.85);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>`;
-  }).join('');
-}
-
-function ctrlRemoverArquivo(id) {
-  ctrlStore.arquivos = ctrlStore.arquivos.filter(d => String(d.id) !== String(id));
-  ctrlRenderFiles();
-}
-
-function ctrlPreview(id) {
-  const doc = ctrlStore.arquivos.find(d => String(d.id) === String(id));
-  if (!doc) return;
-  const win = window.open('', '_blank', 'width=900,height=700');
-  if (doc.type.startsWith('image/')) {
-    win.document.write(`<html><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="${doc.data}" style="max-width:100%;max-height:100vh;object-fit:contain"></body></html>`);
-  } else {
-    win.document.write(`<html><body style="margin:0;font-family:sans-serif;background:#111;color:#eee;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px"><div style="font-size:48px">📎</div><div>${doc.name}</div><a href="${doc.data}" download="${doc.name}" style="color:#7c6af5">⬇️ Baixar</a></body></html>`);
-  }
-}
-
-function ctrlStatus(type, msg) {
-  const el = document.getElementById('ctrl-gs-status');
-  const cores = { saving: 'rgba(59,126,255,0.1)', saved: 'rgba(0,196,140,0.1)', error: 'rgba(255,77,106,0.1)' };
-  const txtcores = { saving: 'var(--accent)', saved: 'var(--green)', error: 'var(--red)' };
-  el.style.display = 'block';
-  el.style.background = cores[type] || cores.saving;
-  el.style.color = txtcores[type] || txtcores.saving;
-  el.textContent = msg;
-  if (type === 'saved' || type === 'error') setTimeout(() => el.style.display = 'none', 4000);
-}
-
-async function salvarControle() {
-  const decisor     = document.getElementById('ctrl-decisor').value.trim();
-  const data        = document.getElementById('ctrl-data').value;
-  const cliente     = document.getElementById('ctrl-cliente').value.trim();
-  const cnpj        = document.getElementById('ctrl-cnpj').value.trim();
-  const repr        = document.getElementById('ctrl-representante').value.trim();
-  const decisao     = document.getElementById('ctrl-decisao').value;
-  const valor       = document.getElementById('ctrl-valor').value;
-  const motivo      = document.getElementById('ctrl-motivo').value.trim();
-
-  if (!decisor)  { ctrlStatus('error', '⚠️ Informe o nome de quem decidiu.'); return; }
-  if (!cliente)  { ctrlStatus('error', '⚠️ Informe o nome do cliente.'); return; }
-  if (!decisao)  { ctrlStatus('error', '⚠️ Selecione a decisão.'); return; }
-  if (!motivo)   { ctrlStatus('error', '⚠️ Informe o motivo da decisão.'); return; }
-
-  const btn = document.getElementById('btn-ctrl-salvar');
-  const spinner = document.getElementById('ctrl-spinner');
-  btn.disabled = true; spinner.style.display = 'inline-block';
-
-  // Formatar data para pt-BR
-  const dataFormatada = data ? new Date(data + 'T12:00:00').toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
-
-  const registro = {
-    'Data':          dataFormatada,
-    'Decisor':       decisor,
-    'Cliente':       cliente,
-    'CNPJ':          cnpj || 'Não informado',
-    'Representante': repr || 'Não informado',
-    'Decisão':       decisao,
-    'Valor (R$)':    valor ? parseFloat(valor) : '',
-    'Motivo':        motivo,
-    'Arquivos':      ctrlStore.arquivos.length + ' arquivo(s)',
-    'Pasta Drive':   ''
-  };
-
-  ctrlStatus('saving', '💾 Salvando registro...');
-
-  // Salvar na planilha
-  let planilhaOk = false;
-  try {
-    const r = await gsPost({ action: 'salvar_controle', registro });
-    planilhaOk = r && r.ok;
-    if (!planilhaOk) ctrlStatus('error', '⚠️ Erro ao salvar: ' + (r?.erro || 'Verifique o Apps Script.'));
-  } catch(e) {
-    ctrlStatus('error', '❌ Erro de conexão.');
-    btn.disabled = false; spinner.style.display = 'none';
-    return;
-  }
-
-  // Upload de arquivos para Drive
-  let pastaUrl = '';
-  if (ctrlStore.arquivos.length > 0) {
-    const nomePasta = `${cliente}${cnpj ? ' — ' + cnpj : ''} (Controle)`;
-    for (let i = 0; i < ctrlStore.arquivos.length; i++) {
-      const arq = ctrlStore.arquivos[i];
-      ctrlStatus('saving', `📁 Enviando arquivo ${i+1}/${ctrlStore.arquivos.length}...`);
-      try {
-        const base64Data = arq.data.split(',')[1];
-        const r = await gsPost({ action: 'upload_drive', nomePasta, nomeArquivo: arq.name, categoria: 'Controle de Liberação', mimeType: arq.type || 'application/octet-stream', base64Data });
-        if (r && r.ok && r.pastaUrl) pastaUrl = r.pastaUrl;
-      } catch(e) {}
-    }
-  }
-
-  if (planilhaOk) {
-    ctrlStatus('saved', '✅ Registro salvo com sucesso!' + (pastaUrl ? ' Arquivos no Drive.' : ''));
-    limparControle();
-    carregarControle();
-  }
-
-  btn.disabled = false; spinner.style.display = 'none';
-}
-
-function limparControle() {
-  ['ctrl-decisor','ctrl-cliente','ctrl-cnpj','ctrl-representante','ctrl-valor','ctrl-motivo'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  document.getElementById('ctrl-decisao').selectedIndex = 0;
-  const hoje = new Date();
-  document.getElementById('ctrl-data').value = hoje.toISOString().split('T')[0];
-  ctrlStore.arquivos = [];
-  ctrlRenderFiles();
-}
-
-let _ctrlTodos = [];
-
-async function carregarControle() {
-  iniciarControle();
-  const st = document.getElementById('ctrl-status');
-  st.style.display = 'block'; st.textContent = '⏳ Carregando registros...';
-  try {
-    const r = await gsPost({ action: 'buscar_controle' });
-    if (!r.ok) { st.textContent = '❌ Erro ao carregar: ' + (r.erro || ''); return; }
-    _ctrlTodos = r.registros || [];
-    st.textContent = `✅ ${_ctrlTodos.length} registro(s) encontrado(s).`;
-    renderControle(_ctrlTodos);
-  } catch(e) {
-    st.textContent = '❌ Erro de conexão.';
-  }
-}
-
-function filtrarControle() {
-  const busca   = (document.getElementById('ctrl-busca').value || '').toLowerCase();
-  const decisao = document.getElementById('ctrl-filtro-decisao').value;
-  const filtrado = _ctrlTodos.filter(r => {
-    const matchBusca  = !busca || (r['Cliente']||'').toLowerCase().includes(busca) || (r['Decisor']||'').toLowerCase().includes(busca) || (r['CNPJ']||'').toLowerCase().includes(busca);
-    const matchDec    = !decisao || r['Decisão'] === decisao;
-    return matchBusca && matchDec;
-  });
-  renderControle(filtrado);
-}
-
-function renderControle(lista) {
-  const el = document.getElementById('ctrl-resultados');
-  if (!lista || lista.length === 0) {
-    el.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--mono);font-size:13px;color:var(--muted);">Nenhum registro encontrado.</div>';
-    return;
-  }
-
-  const decCor = d => {
-    if ((d||'').includes('Liberado com')) return '#f5a623';
-    if ((d||'').includes('Liberado'))     return '#00c48c';
-    if ((d||'').includes('Recusado'))     return '#ff4d6a';
-    return '#3b7eff';
-  };
-  const decIcon = d => {
-    if ((d||'').includes('Liberado com')) return '⚠️';
-    if ((d||'').includes('Liberado'))     return '✅';
-    if ((d||'').includes('Recusado'))     return '❌';
-    return '🔄';
-  };
-  const fmtVal = v => {
-    const n = parseFloat(v);
-    if (!v || isNaN(n)) return '—';
-    return 'R$ ' + n.toLocaleString('pt-BR', {minimumFractionDigits:2});
-  };
-
-  el.innerHTML = lista.map((r, i) => `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;" onclick="toggleCtrlCard(${i})">
-        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
-          <div style="width:36px;height:36px;background:rgba(59,126,255,0.1);border:1px solid rgba(59,126,255,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${decIcon(r['Decisão'])}</div>
-          <div style="min-width:0;">
-            <div style="font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r['Cliente']||'—'}</div>
-            <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px;">${r['Data']||'—'} &nbsp;·&nbsp; ${r['Decisor']||'—'}</div>
-          </div>
-        </div>
-        <div style="text-align:right;flex-shrink:0;">
-          <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:${decCor(r['Decisão'])}">${r['Decisão']||'—'}</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;">${fmtVal(r['Valor (R$)'])}</div>
-        </div>
-        <div id="ctrl-chevron-${i}" style="color:var(--muted);font-size:13px;transition:transform 0.2s;flex-shrink:0;">▼</div>
-      </div>
-      <div id="ctrl-body-${i}" style="display:none;padding:0 18px 18px;border-top:1px solid var(--border);">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
-          <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;">
-            <div style="font-size:9px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">CNPJ / CPF</div>
-            <div style="font-size:13px;font-weight:600;font-family:var(--mono);color:var(--text);">${r['CNPJ']||'—'}</div>
-          </div>
-          <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;">
-            <div style="font-size:9px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Representante</div>
-            <div style="font-size:13px;font-weight:600;font-family:var(--mono);color:var(--text);">${r['Representante']||'—'}</div>
-          </div>
-          <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;">
-            <div style="font-size:9px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Valor</div>
-            <div style="font-size:13px;font-weight:600;font-family:var(--mono);color:var(--accent2);">${fmtVal(r['Valor (R$)'])}</div>
-          </div>
-          <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;">
-            <div style="font-size:9px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Arquivos</div>
-            <div style="font-size:13px;font-weight:600;font-family:var(--mono);color:var(--text);">${r['Arquivos']||'—'}</div>
-          </div>
-        </div>
-        <div style="margin-top:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;">
-          <div style="font-size:9px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:6px;">Motivo / Justificativa</div>
-          <div style="font-family:var(--mono);font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;">${r['Motivo']||'—'}</div>
-        </div>
-        ${r['Pasta Drive'] ? `<div style="margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--accent);">📁 <a href="${r['Pasta Drive']}" target="_blank" style="color:var(--accent);">Ver arquivos no Drive</a></div>` : ''}
-      </div>
-    </div>`).join('');
-}
-
-function toggleCtrlCard(i) {
-  const body    = document.getElementById('ctrl-body-' + i);
-  const chevron = document.getElementById('ctrl-chevron-' + i);
-  const open    = body.style.display === 'block';
-  body.style.display    = open ? 'none' : 'block';
-  chevron.style.transform = open ? '' : 'rotate(180deg)';
-}
-
-
+// Auto-login removido: sempre exibe a tela de login ao abrir o arquivo
 // ══════════════════════════════════════════════════════════
 function todayStr(){ return new Date().toLocaleDateString('pt-BR'); }
 function switchTipo(){ const t=document.getElementById('tipo_cliente').value; if(t==='novo') showPanel('novo'); else if(t==='antigo') showPanel('antigo'); }
@@ -3379,15 +3018,13 @@ function switchNav(aba) {
   document.getElementById('painel-dashboard').style.display = aba === 'dashboard' ? 'block' : 'none';
   document.getElementById('painel-analise').style.display   = aba === 'analise'   ? 'block' : 'none';
   document.getElementById('painel-consulta').style.display  = aba === 'consulta'  ? 'block' : 'none';
-  document.getElementById('painel-controle').style.display  = aba === 'controle'  ? 'block' : 'none';
-  ['dashboard','analise','consulta','controle'].forEach(t => {
+  ['dashboard','analise','consulta'].forEach(t => {
     const btn = document.getElementById('nav-'+t);
     if (!btn) return;
     const active = t === aba;
     btn.classList.toggle('active', active);
   });
   if (aba === 'dashboard') carregarDashboard();
-  if (aba === 'controle') carregarControle();
 }
 
 async function carregarDashboard() {
